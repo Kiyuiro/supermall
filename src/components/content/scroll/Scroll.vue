@@ -34,7 +34,7 @@ export default {
       this.scroll && this.scroll.finishPullUp();
     },
     refresh() {
-      console.log("刷新");
+      console.log("refresh");
       this.scroll && this.scroll.refresh();
     },
     getScrollY() {

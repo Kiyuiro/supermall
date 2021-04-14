@@ -81,7 +81,7 @@ export default {
     getHomeGoods(type) {
       let page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        console.log(res);
+        // console.log(res);
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
         // 重置上拉加载
@@ -108,7 +108,7 @@ export default {
     // 轮播图加载完成
     homeSwiperImageLoad() {
       // 获取 tabControl 的 offsetTop
-      console.log(this.$refs.tabControl.$el.offsetTop);
+      // console.log(this.$refs.tabControl.$el.offsetTop);
       this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
     }
   },
