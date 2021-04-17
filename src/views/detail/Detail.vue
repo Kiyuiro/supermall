@@ -1,111 +1,16 @@
 <template>
   <div class="detail">
-    <detail-nav-bar/>
-    <DetailSwiper :imgs="SwiperImages"/>
-    <detail-base-info :data="goods"/>
-    <detail-shop-info :data="shop"/>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>10</li>
-      <li>11</li>
-      <li>12</li>
-      <li>13</li>
-      <li>14</li>
-      <li>15</li>
-      <li>16</li>
-      <li>17</li>
-      <li>18</li>
-      <li>19</li>
-      <li>20</li>
-      <li>21</li>
-      <li>22</li>
-      <li>23</li>
-      <li>24</li>
-      <li>25</li>
-      <li>26</li>
-      <li>27</li>
-      <li>28</li>
-      <li>29</li>
-      <li>30</li>
-      <li>31</li>
-      <li>32</li>
-      <li>33</li>
-      <li>34</li>
-      <li>35</li>
-      <li>36</li>
-      <li>37</li>
-      <li>38</li>
-      <li>39</li>
-      <li>40</li>
-      <li>41</li>
-      <li>42</li>
-      <li>43</li>
-      <li>44</li>
-      <li>45</li>
-      <li>46</li>
-      <li>47</li>
-      <li>48</li>
-      <li>49</li>
-      <li>50</li>
-      <li>51</li>
-      <li>52</li>
-      <li>53</li>
-      <li>54</li>
-      <li>55</li>
-      <li>56</li>
-      <li>57</li>
-      <li>58</li>
-      <li>59</li>
-      <li>60</li>
-      <li>61</li>
-      <li>62</li>
-      <li>63</li>
-      <li>64</li>
-      <li>65</li>
-      <li>66</li>
-      <li>67</li>
-      <li>68</li>
-      <li>69</li>
-      <li>70</li>
-      <li>71</li>
-      <li>72</li>
-      <li>73</li>
-      <li>74</li>
-      <li>75</li>
-      <li>76</li>
-      <li>77</li>
-      <li>78</li>
-      <li>79</li>
-      <li>80</li>
-      <li>81</li>
-      <li>82</li>
-      <li>83</li>
-      <li>84</li>
-      <li>85</li>
-      <li>86</li>
-      <li>87</li>
-      <li>88</li>
-      <li>89</li>
-      <li>90</li>
-      <li>91</li>
-      <li>92</li>
-      <li>93</li>
-      <li>94</li>
-      <li>95</li>
-      <li>96</li>
-      <li>97</li>
-      <li>98</li>
-      <li>99</li>
-      <li>100</li>
-    </ul>
+    <detail-nav-bar ref="nav" @titleClick="titleClick"/>
+    <scroll ref="scroll" :probe-type="3" class="content" @scroll="currentIndexChange">
+      <detail-swiper :imgs="SwiperImages"/>
+      <detail-base-info :data="goods"/>
+      <detail-shop-info :data="shop"/>
+      <detail-image-info :data="imageInfo"/>
+      <detail-params ref="params" :data="params"/>
+      <detail-comment ref="comment" :data="comment"/>
+      <goods-list ref="list" :goods="recommends"/>
+    </scroll>
+    <detail-bottom-bar/>
   </div>
 </template>
 
@@ -114,8 +19,16 @@ import DetailNavBar from "@/views/detail/DetailNavBar";
 import DetailSwiper from "@/views/detail/DetailSwiper";
 import DetailBaseInfo from "@/views/detail/DetailBaseInfo";
 import DetailShopInfo from "@/views/detail/DetailShopInfo";
+import DetailImageInfo from "@/views/detail/DetailImageInfo";
+import DetailParams from "@/views/detail/DetailParams";
+import DetailComment from "@/views/detail/DetailComment";
+import DetailBottomBar from "@/views/detail/DetailBottomBar";
 
-import {getDetail, GoodsInfo, Shop} from "@/network/detail";
+import GoodsList from "@/components/content/goods/GoodsList";
+import Scroll from "@/components/content/scroll/Scroll";
+
+import {getDetail, getRecommend, GoodsInfo, Shop} from "@/network/detail";
+import {debounce} from "@/common/utils";
 
 export default {
   name: "Detail",
@@ -124,35 +37,107 @@ export default {
       id: null,
       SwiperImages: [],
       goods: null,
-      shop: null
+      shop: null,
+      imageInfo: null,
+      params: null,
+      comment: null,
+      recommends: []
     }
   },
   components: {
     DetailSwiper,
     DetailNavBar,
     DetailBaseInfo,
-    DetailShopInfo
+    DetailShopInfo,
+    DetailImageInfo,
+    DetailParams,
+    DetailComment,
+    DetailBottomBar,
+    GoodsList,
+    Scroll
+  },
+  methods: {
+    // 点击标题滚动
+    titleClick(index) {
+      const scrollToY = [
+        0, this.$refs.params.$el.offsetTop,
+        this.$refs.comment.$el.offsetTop, this.$refs.list.$el.offsetTop
+      ];
+      this.$refs.scroll.scrollTo(0, -scrollToY[index], 100);
+    },
+    // 根据滚动条改变标题
+    currentIndexChange(position) {
+      // console.log(position);
+      position = -position.y;
+      if (position >= this.$refs.list.$el.offsetTop) {
+        this.currentIndex = 3;
+      } else if (position >= this.$refs.comment.$el.offsetTop) {
+        this.currentIndex = 2;
+      } else if (position >= this.$refs.params.$el.offsetTop) {
+        this.currentIndex = 1;
+      } else if (position >= 0) {
+        this.currentIndex = 0;
+      }
+      this.$refs.nav.currentIndex = this.currentIndex;
+    }
   },
   created() {
     // 保存商品 ID
     this.id = this.$route.params.id;
     // 请求商品数据
     getDetail(this.id).then(res => {
-      // console.log(res);
+      // console.log('detail', res);
       let data = res.result;
       // 轮播图数据
       this.SwiperImages = data.itemInfo.topImages
       // 获取商品数据
       this.goods = new GoodsInfo(data.itemInfo, data.columns, data.shopInfo.services);
-      // console.log(this.goods);
+      // console.log('goods', this.goods);
       // 获取店铺数据
       this.shop = new Shop(data.shopInfo)
-      console.log(this.shop);
+      // console.log('shop', this.shop);
+      // 获取商品详细信息
+      this.imageInfo = data.detailInfo;
+      // console.log('imageInfo', this.imageInfo);
+      // 获取商品参数信息
+      this.params = data.itemParams;
+      console.log('params', this.params);
+      // 商品评论
+      try {
+        this.comment = data.rate.list[0];
+      } catch (e) {
+        console.log('商品没有评论');
+      }
+    });
+    // 商品推荐数据
+    getRecommend().then(res => {
+      // console.log("recommend: ", res);
+      this.recommends = res.data.list;
+      // console.log(this.recommends);
+    })
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 500);
+    this.$bus.$on('detailImageLoad', () => {
+      refresh();
     })
   }
 }
 </script>
 
 <style scoped>
+.detail {
+  height: 100vh;
+  background-color: #fff;
+  position: relative;
+}
 
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
+}
 </style>

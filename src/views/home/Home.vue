@@ -6,7 +6,7 @@
     <tab-control :title="['流行', '新款', '精选']"
                  class="tab-control"
                  v-show="isTabFixed"
-                 ref = "tabControl"
+                 ref = "tabControl2"
                  @tabClick="tabClick"></tab-control>
     <scroll class="content" ref="scroll"
             :probe-type="3" @scroll="contentScroll"
@@ -68,6 +68,7 @@ export default {
       console.log(index);
       this.currentType = Object.keys(this.goods)[index]
       this.$refs.tabControl.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     // 轮播图数据请求
     getHomeMultidata() {
@@ -135,6 +136,7 @@ export default {
   },
   deactivated() {
     console.log('home deactivated');
+    // 保存离开时滚动的高度
     this.scrollY = this.$refs.scroll.getScrollY();
   },
   destroyed() {

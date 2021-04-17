@@ -36,6 +36,7 @@ export default {
     },
     titleClick(index) {
       this.currentIndex = index;
+      this.$emit('titleClick', index);
     }
   }
 }
@@ -43,10 +44,16 @@ export default {
 
 <style scoped>
 /* 快速实现吸顶效果 */
+/*.detail-nav-bar {*/
+/*  position: sticky;*/
+/*  top: 0;*/
+/*  z-index: 8;*/
+/*  background-color: #fff;*/
+/*}*/
+
 .detail-nav-bar {
-  position: sticky;
-  top: 0;
-  z-index: 8;
+  position: relative;
+  z-index: 9;
   background-color: #fff;
 }
 

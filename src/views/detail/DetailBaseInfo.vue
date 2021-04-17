@@ -30,7 +30,9 @@ export default {
   props: {
     data: {
       type: Object,
-      default: null
+      default() {
+        return {};
+      }
     }
   }
 }

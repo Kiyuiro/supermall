@@ -64,14 +64,6 @@ export default {
   margin: 8px auto -3px;
 }
 
-/*.bar-left .service {*/
-/*  background-position: 0 -54px;;*/
-/*}*/
-
-/*.bar-left .shop {*/
-/*  background-position: 0 -98px;*/
-/*}*/
-
 .bar-right {
   font-size: 15px;
   color: #333;

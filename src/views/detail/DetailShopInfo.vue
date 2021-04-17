@@ -95,7 +95,6 @@ export default {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* TODO 需更改 */
 .shop-sells-count, .shop-goods-count {
   font-size: 18px;
 }
@@ -104,8 +103,6 @@ export default {
   margin-top: 10px;
   font-size: 12px;
 }
-
-/* ------------------------- */
 
 .shop-evaluate-score {
   font-size: 13px;
