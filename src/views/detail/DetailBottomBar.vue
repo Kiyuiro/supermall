@@ -15,8 +15,8 @@
       </div>
     </div>
     <div class="bar-item bar-right">
-      <div class="cart">加入购物车</div>
-      <div class="buy">购买</div>
+      <div class="cart" @click="addToCart">加入购物车</div>
+      <div class="buy"><b>购买</b></div>
     </div>
   </div>
 </template>
@@ -28,13 +28,19 @@ export default {
   name: "DetailBottomBar",
   components: {
     TabBarItem
-  }
+  },
+   methods: {
+     addToCart() {
+       console.log('send add to cart request');
+       this.$emit('addToCart')
+     }
+   }
 }
 </script>
 
 <style scoped>
 .bottom-bar {
-  height: 49px;
+  height: 50px;
   background-color: #fff;
   position: fixed;
   left: 0;
@@ -49,7 +55,7 @@ export default {
   display: flex;
 }
 
-.bar-item>div {
+.bar-item > div {
   flex: 1;
 }
 
@@ -67,7 +73,7 @@ export default {
 .bar-right {
   font-size: 15px;
   color: #333;
-  line-height: 58px;
+  line-height: 50px;
 }
 
 .bar-right .cart {
@@ -77,11 +83,6 @@ export default {
 
 .bar-right .buy {
   background-color: #f69;
-}
-
-.sport-ball {
-  position: absolute;
-  left: 225px;
-  bottom: 20px;
+  color: #fff;
 }
 </style>

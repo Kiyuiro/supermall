@@ -39,8 +39,6 @@ export default {
     box-shadow:0 0 0 0 var(--color-high-text);
     transform: scale(0.1);
     transition: all 0.5s;
-    /*animation: disappear 1s;*/
-    /*transform: rotate3d(0, 1, 0, 0) scale(0);*/
   }
 
   .show {
@@ -50,8 +48,6 @@ export default {
     box-shadow:0 0 20px 8px var(--color-high-text);
     transform: scale(1);
     transition: all 0.5s;
-    /*animation: show 1s;*/
-    /*transform: rotate3d(0, 1, 0, 720deg) scale(1);*/
   }
 
 </style>

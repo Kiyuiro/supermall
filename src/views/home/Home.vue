@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav">
+    <nav-bar class="nav-bar">
       <div slot="center">购物街</div>
     </nav-bar>
     <tab-control :title="['流行', '新款', '精选']"
@@ -29,14 +29,15 @@ import NavBar from "@/components/common/navbar/NavBar";
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 import Scroll from "@/components/content/scroll/Scroll";
-import BackTop from "@/components/content/backTop/BackTop";
 
 import {getHomeGoods, getHomeMultidata} from "@/network/home";
 import {debounce} from "@/common/utils"
+import {backTopMixin} from "@/common/mixin";
 
 
 export default {
   name: "Home",
+  mixins: [backTopMixin],
   data() {
     return {
       banners: [],
@@ -47,7 +48,6 @@ export default {
         'sell': {page: 0, list: []}
       },
       currentType: 'pop',
-      isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       scrollY: 0
@@ -59,13 +59,12 @@ export default {
     NavBar,
     TabControl,
     GoodsList,
-    Scroll,
-    BackTop
+    Scroll
   },
   methods: {
     // 事件监听
     tabClick(index) {
-      console.log(index);
+      // console.log(index);
       this.currentType = Object.keys(this.goods)[index]
       this.$refs.tabControl.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
@@ -89,15 +88,11 @@ export default {
         this.$refs.scroll.finishPullUp();
       })
     },
-    // 返回顶部按钮
-    backClick() {
-      this.$refs.scroll.scrollTo(0,0, 500);
-    },
     // 获取滚动高度
     contentScroll(position) {
       // console.log(position)
       // 判断是否显示 BackTop
-      this.isShowBackTop = Math.abs(position.y) > 1000;
+      this.listenShowBackTop(position);
       // 判断 TabControl 是否固定
       this.isTabFixed = Math.abs(position.y) > this.tabOffsetTop
     },
@@ -151,7 +146,7 @@ export default {
   position: relative;
 }
 
-.home-nav {
+.nav-bar {
   background-color: var(--color-tint);
   color: #fff;
   font-size: 18px;
@@ -169,7 +164,7 @@ export default {
   overflow: hidden;
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 50px;
   left: 0;
   right: 0;
 }

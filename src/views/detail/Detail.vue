@@ -10,7 +10,8 @@
       <detail-comment ref="comment" :data="comment"/>
       <goods-list ref="list" :goods="recommends"/>
     </scroll>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addToCart="addToCart"/>
+    <back-top @click.native="backClick" :is-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -29,9 +30,11 @@ import Scroll from "@/components/content/scroll/Scroll";
 
 import {getDetail, getRecommend, GoodsInfo, Shop} from "@/network/detail";
 import {debounce} from "@/common/utils";
+import {backTopMixin} from "@/common/mixin";
 
 export default {
   name: "Detail",
+  mixins: [backTopMixin],
   data() {
     return {
       id: null,
@@ -68,17 +71,32 @@ export default {
     // 根据滚动条改变标题
     currentIndexChange(position) {
       // console.log(position);
-      position = -position.y;
-      if (position >= this.$refs.list.$el.offsetTop) {
+      let positionY = -position.y;
+      if (positionY >= this.$refs.list.$el.offsetTop) {
         this.currentIndex = 3;
-      } else if (position >= this.$refs.comment.$el.offsetTop) {
+      } else if (positionY >= this.$refs.comment.$el.offsetTop) {
         this.currentIndex = 2;
-      } else if (position >= this.$refs.params.$el.offsetTop) {
+      } else if (positionY >= this.$refs.params.$el.offsetTop) {
         this.currentIndex = 1;
-      } else if (position >= 0) {
+      } else if (positionY >= 0) {
         this.currentIndex = 0;
       }
       this.$refs.nav.currentIndex = this.currentIndex;
+
+      this.listenShowBackTop(position)
+    },
+    addToCart() {
+      console.log('add to cart');
+      // 获取加入购物车的商品信息
+      let product = {};
+      product.image = this.imageInfo.detailImage[0].list[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.id = this.id;
+      // 添加商品到购物车
+      console.log(this.imageInfo);
+      this.$store.dispatch("addToCart", product);
     }
   },
   created() {
@@ -105,9 +123,7 @@ export default {
       // 商品评论
       try {
         this.comment = data.rate.list[0];
-      } catch (e) {
-        console.log('商品没有评论');
-      }
+      } catch (e) { console.log('商品没有评论'); }
     });
     // 商品推荐数据
     getRecommend().then(res => {
@@ -128,7 +144,6 @@ export default {
 <style scoped>
 .detail {
   height: 100vh;
-  background-color: #fff;
   position: relative;
 }
 
@@ -136,7 +151,7 @@ export default {
   overflow: hidden;
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 50px;
   left: 0;
   right: 0;
 }

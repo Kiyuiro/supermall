@@ -3,7 +3,7 @@ import VueRouter from "vue-router"
 
 const Home = () => import("@/views/home/Home")
 const Category = () => import("@/views/category/Category")
-const Cart = () => import("@/views/cart/cart")
+const Cart = () => import("@/views/cart/Cart")
 const User = () => import("@/views/user/User")
 const Detail = () => import("@/views/detail/Detail")
 
