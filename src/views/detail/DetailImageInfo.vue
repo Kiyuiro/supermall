@@ -8,7 +8,7 @@
     <div v-for="(value, index) in data.detailImage" :key="index" class="info">
       <div class="info-key">{{ value.key }}</div>
       <div class="info-list">
-        <img v-for="index in 3" v-if="value.list[index]" :key="index" :src="value.list[index]" alt="">
+        <img v-for="index in 3" v-if="value.list[index]" :key="index" v-lazy="value.list[index]" alt="" src="">
       </div>
     </div>
     <div v-if="data.detailImage[0].list.length > 3" class="info-list">

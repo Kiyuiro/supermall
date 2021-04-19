@@ -25,10 +25,10 @@
 import HomeSwiper from "@/views/home/HomeSwiper";
 import HomeRecommendView from "@/views/home/HomeRecommendView";
 
-import NavBar from "@/components/common/navbar/NavBar";
+import NavBar from "@/components/content/navbar/NavBar";
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
-import Scroll from "@/components/content/scroll/Scroll";
+import Scroll from "@/components/common/scroll/Scroll";
 
 import {getHomeGoods, getHomeMultidata} from "@/network/home";
 import {debounce} from "@/common/utils"

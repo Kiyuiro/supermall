@@ -1,5 +1,5 @@
 // 回到顶部按钮
-import BackTop from "@/components/content/backTop/BackTop";
+import BackTop from "@/components/common/backTop/BackTop";
 export const backTopMixin = {
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <div class="cart-summary">
-    <div :class="{check: isSelectAll}" class="item-select" @click="checkClick">
+    <div :class="{check: isSelectAll}" class="item-select" @click="checkClick(isSelectAll)">
       <i class="fas fa-check"></i>
     </div>
     <div class="text">
@@ -18,31 +18,26 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "CartSummary",
-  methods: {
-    checkClick() {
-      let t = this.isSelectAll;
-      this.$store.getters.cartList.forEach(value => {
-        value.check = !t;
-      });
-    }
-  },
   computed: {
     ...mapGetters({
-      goodsCount: 'goodsCount'
+      goodsCount: 'goodsCount',
+      cartList: 'cartList'
     }),
     totalPrice() {
       let p = 0;
-      this.$store.getters.cartList.forEach(value => {
+      this.cartList.forEach(value => {
         if (value.check) p += value.price * value.count
       });
       return p;
     },
     isSelectAll() {
-      let res = true;
-      this.$store.getters.cartList.forEach(value => {
-        if (!value.check) res = false;
-      });
-      return res;
+      if(this.cartList.length === 0) return false;
+      return !this.cartList.find(value => !value.check);
+    }
+  },
+  methods: {
+    checkClick(isSelect) {
+      this.cartList.forEach(value => value.check = !isSelect);
     }
   }
 }
@@ -97,7 +92,8 @@ export default {
 }
 
 .text .right {
-  padding-left: 210px;
+  position: absolute;
+  right: 110px;
 }
 
 .pay {

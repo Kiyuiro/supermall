@@ -2,7 +2,7 @@ export default {
   goodsCount(state) {
     let count = 0;
     state.cartList.forEach(value => {
-      count += value.count;
+      if(value.check) count += value.count;
     })
     return count;
   },

@@ -26,11 +26,13 @@ import DetailComment from "@/views/detail/DetailComment";
 import DetailBottomBar from "@/views/detail/DetailBottomBar";
 
 import GoodsList from "@/components/content/goods/GoodsList";
-import Scroll from "@/components/content/scroll/Scroll";
+import Scroll from "@/components/common/scroll/Scroll";
 
 import {getDetail, getRecommend, GoodsInfo, Shop} from "@/network/detail";
 import {debounce} from "@/common/utils";
 import {backTopMixin} from "@/common/mixin";
+
+import { mapActions } from 'vuex';
 
 export default {
   name: "Detail",
@@ -60,6 +62,9 @@ export default {
     Scroll
   },
   methods: {
+    ...mapActions({
+      addCart: 'addToCart'
+    }),
     // 点击标题滚动
     titleClick(index) {
       const scrollToY = [
@@ -95,8 +100,13 @@ export default {
       product.price = this.goods.realPrice;
       product.id = this.id;
       // 添加商品到购物车
-      console.log(this.imageInfo);
-      this.$store.dispatch("addToCart", product);
+      // this.$store.dispatch("addToCart", product).then(res => {
+      //   console.log(res);
+      // });
+      this.addCart(product).then(res => {
+        // console.log(res);
+        this.$toast.show(res, 500);
+      });
     }
   },
   created() {

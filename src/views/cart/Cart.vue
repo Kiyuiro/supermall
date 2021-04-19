@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import NavBar from "@/components/common/navbar/NavBar";
+import NavBar from "@/components/content/navbar/NavBar";
 import CartList from "@/views/cart/CartList";
 import CartSummary from "@/views/cart/CartSummary";
 
-import Scroll from "@/components/content/scroll/Scroll";
+import Scroll from "@/components/common/scroll/Scroll";
 
 import {mapGetters} from "vuex"
 
