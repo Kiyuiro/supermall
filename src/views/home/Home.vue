@@ -3,22 +3,22 @@
     <nav-bar class="nav-bar">
       <div slot="center">购物街</div>
     </nav-bar>
-    <tab-control :title="['流行', '新款', '精选']"
+    <tab-control v-show="isTabFixed"
+                 ref="tabControl2"
+                 :title="['流行', '新款', '精选']"
                  class="tab-control"
-                 v-show="isTabFixed"
-                 ref = "tabControl2"
                  @tabClick="tabClick"></tab-control>
-    <scroll class="content" ref="scroll"
-            :probe-type="3" @scroll="contentScroll"
-            :pull-up-load="true" @pullingUp="loadMore">
+    <scroll ref="scroll" :probe-type="3"
+            :pull-up-load="true" class="content"
+            @pullingUp="loadMore" @scroll="contentScroll">
       <home-swiper :banners="banners" @homeSwiperImageLoad="homeSwiperImageLoad"/>
       <home-recommend-view :recommends="recommends"/>
-      <tab-control :title="['流行', '新款', '精选']"
-                   ref = "tabControl"
+      <tab-control ref="tabControl"
+                   :title="['流行', '新款', '精选']"
                    @tabClick="tabClick"></tab-control>
       <goods-list :goods="goods[currentType].list"></goods-list>
     </scroll>
-    <back-top @click.native="backClick" :is-show="isShowBackTop"/>
+    <back-top :is-show="isShowBackTop" @click.native="backClick"/>
   </div>
 </template>
 <script>
