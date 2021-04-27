@@ -72,7 +72,7 @@ export default {
     // 轮播图数据请求
     getHomeMultidata() {
       getHomeMultidata().then(res => {
-        // console.log(res);
+        console.log(res);
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
       });
@@ -133,9 +133,6 @@ export default {
     console.log('home deactivated');
     // 保存离开时滚动的高度
     this.scrollY = this.$refs.scroll.getScrollY();
-  },
-  destroyed() {
-    console.log("home destroyed");
   }
 }
 </script>
@@ -152,13 +149,6 @@ export default {
   font-size: 18px;
   z-index: 9;
 }
-
-/* 快速实现吸顶效果 */
-/*.tab-control {*/
-/*  position: sticky;*/
-/*  top: 44px;*/
-/*  z-index: 8;*/
-/*}*/
 
 .content {
   overflow: hidden;
